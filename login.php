@@ -12,10 +12,7 @@
         $obj=new backbone(); //Make object of classes.php so that we can send the data.
         $obj->validateLogin($email,$password,$db->conn);
       }
-
-
-
-      ?>
+?>
 	<!---header--->
 		<!---login--->
 			<div class="content">
