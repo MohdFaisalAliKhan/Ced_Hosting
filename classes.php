@@ -150,9 +150,127 @@ class backbone
 		}
 
 	}
+
+	function categoryShow($conn)
+	{
+		$sql="SELECT * FROM `tbl_product`";
+		$arr=array();
+		$res=mysqli_query($conn,$sql);
+		if(mysqli_num_rows($res)>0)
+		{
+			while($row=$res->fetch_assoc())
+			{
+				$arr[]=$row;
+			}
+			return $arr;
+		}
+	}
+
+	function parentProductName($id,$conn)
+	{
+		$sql="SELECT * FROM `tbl_product` WHERE `prod_parent_id`='$id'";
+		$res=mysqli_query($conn,$sql);
+		if(mysqli_num_rows($res)>0)
+		{
+			while($row=$res->fetch_assoc())
+			{
+				if($row['prod_parent_id']==1)
+				{ 
+					$parent_name="Hosting";
+
+				}
+				
+			}
+			return $parent_name;
+		}
+	}
+
+	//ADD CATEGORY ME DROPDOWN ME PARENT KA NAME SHOW HO
+	function showParentCategory($id,$conn)
+	{
+		$sql="SELECT * FROM `tbl_product` WHERE `id`='$id'";
+		$res=mysqli_query($conn,$sql);
+		if(mysqli_num_rows($res)>0){
+			while($row=$res->fetch_assoc())
+			{
+				$dropdown_value=$row['prod_name'];
+			}
+			return $dropdown_value;
+		}
+
+	}
+	function insertTbl_product($prod_parent_id,$name,$link,$avail,$conn)
+	{
+		$sql="INSERT INTO tbl_product(`prod_parent_id`,`prod_name`,`link`,`prod_available`,`prod_launch_date`) VALUES ('$prod_parent_id','$name','$link','$avail',NOW())";
+		$res=mysqli_query($conn,$sql);
+		if($res==true)
+		{
+			echo "Record Inserted";
+		}
+		else{
+			echo "Cannot insert record";
+		}
+
+	}
+
+	function deleteCategory($CategoryName,$conn)
+	{
+		$sql="DELETE FROM `tbl_product` WHERE `prod_name`='$CategoryName'";
+		$res=mysqli_query($conn,$sql);
+		if($res==true)
+        {
+        echo "<script type='text/javascript'>alert('Category Deleted from Database.');
+             window.location.href='admin/category.php';  
+
+        </script>";
+        // header("Location:../admin/AddNewLocation.php");
+        }
+
+	}
+
+	function editCategory($ID,$conn)
+	{
+		$arr=array();
+		$sql="SELECT * FROM `tbl_product` WHERE `id`='$ID'";
+		$res=mysqli_query($conn,$sql);
+		if(mysqli_num_rows($res)>0)
+		{
+			while($row=$res->fetch_assoc())
+			{
+				$arr[]=$row;
+			}
+			return $arr;
+		}
+	}
+
+	function updateTbl_product($prod_parent_id,$name,$link,$avail,$conn,$ID)
+	{
+		$sql="UPDATE `tbl_product` SET `prod_parent_id`='$prod_parent_id',
+		                             `prod_name`='$name',
+									 `link`='$link',
+									 `prod_available`='$avail'
+									  WHERE `id`='$ID'";
+		$res=mysqli_query($conn,$sql);
+		if($res==true)
+		{
+			echo "Record Inserted";
+		}
+		else{
+			echo "Cannot insert record";
+		}
+
+	}
+
 }
 
+$db = new db();
+$obj=new backbone();
 
+if(isset($_GET['Name']))
+    {
+    	$CategoryName=$_GET['Name'];
+    	$obj->deleteCategory($CategoryName,$db->conn);
+    }
 
 
 
