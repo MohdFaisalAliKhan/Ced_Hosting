@@ -13,7 +13,7 @@ if(isset($_GET['ID']))
 if(isset($_POST['submitCategory']))
     {
     
-    $prod_parent_id=$_POST['selectProductName'];
+    //$prod_parent_id=$_POST['selectProductName'];
     //echo ($prod_parent_id);
     $name=$_POST['Product_name'];
     //echo ($name);
@@ -22,7 +22,7 @@ if(isset($_POST['submitCategory']))
     $avail=$_POST['selectAvail'];
     //echo ($avail);
     $ID=$_GET['ID'];
-    $obj->updateTbl_product($prod_parent_id,$name,$link,$avail,$db->conn,$ID);
+    $obj->updateTbl_product($name,$link,$avail,$db->conn,$ID);
 
     }   
 
@@ -43,26 +43,42 @@ if(isset($_POST['submitCategory']))
                     { 
                         ?>
               <!-- PARENT PRODUCT ID -->
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <select name="selectProductName" id="selectProductName" style="width:418px;padding:7px;">
-                     <option  vlaue="0">Select Product Parent ID</option>
-                     <option value=1 selected>
+                     <option  vlaue="0">Select Product Parent ID</option> -->
+                     <div class="form-group">
+                        <div class="input-group mb-3">
+                          <input value="<?php $id=1; 
+                                               if($id==1)
+                                              {
+                                                echo 'Hosting';
+                                               }
+                                        ?>" class="form-control" placeholder="Service Name" type="text" name="Product_name" disabled>
+                        </div>
+                     </div>
                           <?php
                         //   TO SHOW HOSTING INSTEAD OF THE ID 
-                            $i=$value['prod_parent_id'];
-                            $sql="SELECT * FROM `tbl_product` WHERE `prod_parent_id`='$i'";
-                            $res=mysqli_query($db->conn,$sql);
-                            if(mysqli_num_rows($res)>0){
-                                while($row=$res->fetch_assoc())
-                                {
-                                    $HostingName=$row['prod_name'];
-                                }
-                            echo $HostingName;
-                            }
+                            // $i=$value['prod_parent_id'];
+                            // $sql="SELECT * FROM `tbl_product`";
+                            // $res=mysqli_query($db->conn,$sql);
+                            // if(mysqli_num_rows($res)>0){
+                            //   while($row=$res->fetch_assoc())
+                            //   {
+                            //     $HostingName=$row['prod_name'];
+                            //     if($row['id']==$_GET['ID'])
+                            //     {
+                            //       echo "<option value=".$row['id']." selected>".$HostingName."</option>";
+                            //     }
+                            //     else{
+                            //       echo "<option value=".$row['id'].">".$HostingName."</option>";
+                            //     }
+                            //   }
+                            // echo $HostingName;
+                            // }
                           ?>
-                     </option>
+<!--                      
                   </select>
-                </div>
+                </div> -->
                 <!-- PRODUCT NAME -->
                 <div class="form-group">
                   <div class="input-group mb-3">
