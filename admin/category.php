@@ -8,11 +8,11 @@
         //echo ($prod_parent_id);
         $name=$_POST['Product_name'];
         //echo ($name);
-        $link=$_POST['Product_link'];
+        $html=$_POST['Product_html'];
         //echo ($link);
         $avail=$_POST['selectAvail'];
         //echo ($avail);
-        $obj->insertTbl_product($prod_parent_id,$name,$link,$avail,$db->conn);
+        $obj->insertTbl_product($prod_parent_id,$name,$html,$avail,$db->conn);
 
       }   
 ?>
@@ -21,12 +21,12 @@
         <div class="header-body">
           <div class="row align-items-center py-4">
             <div class="col-lg-6 col-7">
-              <h6 class="h2 text-white d-inline-block mb-0">Tables</h6>
+              <h6 class="h2 text-white d-inline-block mb-0">Products</h6>
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                   <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                  <li class="breadcrumb-item"><a href="#">Tables</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Tables</li>
+                  <li class="breadcrumb-item"><a href="#">Products</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Create Category</li>
                 </ol>
               </nav>
             </div>
@@ -55,7 +55,7 @@
                     <th scope="col" class="sort" data-sort="name">Product ID</th>
                     <th scope="col" class="sort" data-sort="budget">Parent Product Name</th>
                     <th scope="col" class="sort" data-sort="status">Product Name</th>
-                    <th scope="col">Link</th>
+                    <th scope="col">html</th>
                     <th scope="col" class="sort" data-sort="completion">Product Available</th>
                     <th scope="col">Product Launch Date</th>
                     <th scope="col">Action</th>
@@ -103,8 +103,8 @@
                     <td>
                       <div class="avatar-group">
                         <a href="#" data-toggle="tooltip">
-                        <?php echo($value['link']); 
-                              if(!isset($value['link']))
+                        <?php echo($value['html']); 
+                              if(!isset($value['html']))
                               {
                                 echo "<a href='#'>NULL</a>";
                               }    
@@ -231,7 +231,7 @@
                 <!-- LINK -->
                 <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative">
-                    <input class="form-control" placeholder="Link" type="text" name="Product_link">
+                    <input class="form-control" placeholder="HTML" type="text" name="Product_html">
                   </div>
                 </div>
                 <!-- PRODUCT AVAILABILITY -->

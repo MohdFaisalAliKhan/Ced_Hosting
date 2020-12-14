@@ -41,7 +41,7 @@
                     <th scope="col" class="sort" data-sort="name">Product ID</th>
                     <th scope="col" class="sort" data-sort="name">Parent Name</th>
                     <th scope="col" class="sort" data-sort="budget">Product Name</th>
-                    <th scope="col" class="sort" data-sort="status">Link</th>
+                    <th scope="col" class="sort" data-sort="status">HTML</th>
                     <th scope="col" class="sort" data-sort="completion">Product Availability</th>
                     <th scope="col" class="sort" data-sort="completion">Product Launch Date</th>
                     <th scope="col" class="sort" data-sort="completion">Webspace</th>
@@ -63,6 +63,8 @@
                     $obj=new backbone();
                     $arr=$obj->viewproduct($db->conn);
                     // print_r($arr);
+                    if($arr!=null)
+                    {
                     foreach($arr as $key=>$value)
                     { 
                     // if($value['id']!=1)
@@ -70,7 +72,8 @@
                     
                         //Decoding json object and converting to associative array.
                         $description=json_decode($value['description'],true);
-                        //echo ($description['webspace']);
+                       
+                        
 
 
                     ?>
@@ -103,7 +106,7 @@
                     </td>
                     <td>
                       <div class="avatar-group">
-                          <?php echo($value['link']); ?>
+                          <?php echo($value['html']); ?>
                       </div>
                     </td>
                     <td>
@@ -177,6 +180,8 @@
                    
                    <?php
                     } 
+                    }
+                    //last } for if arr is not null.
                 //   }
                    ?>
 

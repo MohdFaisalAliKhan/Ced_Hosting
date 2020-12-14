@@ -9,22 +9,46 @@ if(isset($_GET['ID']))
         //this ID is of product to be edited.
         $arr=$obj->editCategory($ID,$db->conn);
         $arr2=$obj->editProduct($ID,$db->conn);
+        $arr3=$obj->getParentNameEdit($ID,$db->conn);
+        //echo($_SESSION['mailbox']);
         //This array is here to show the values in field that were submitted before edit button is clicked
-        //print_r($arr2);
+       // print_r($arr2);
+       
     }
-if(isset($_POST['submitCategory']))
+if(isset($_POST['submitProduct']))
     {
     
     //$prod_parent_id=$_POST['selectProductName'];
     //echo ($prod_parent_id);
+    $parent_id=$_POST['parentname'];
     $name=$_POST['Product_name'];
     //echo ($name);
-    $link=$_POST['Product_link'];
-    //echo ($link);
+    $html=$_POST['Product_html'];
+    //echo ($html);
     $avail=$_POST['selectAvail'];
+    $webspace=$_POST['webspace'];
+    $bandwidth=$_POST['Bandwidth'];
+    $freeDomain=$_POST['Free_Domain'];
+    $support=$_POST['Support'];
+    $mail=$_POST['Mailbox'];
+    $month=$_POST['Monthly_Price'];
+    $annual=$_POST['Annual_Price'];
+    $SKU=$_POST['SKU'];
+
+    $description=array(
+      "webspace"=>$webspace,
+      "bandwidth"=>$bandwidth,
+      "freedomain"=>$freeDomain,
+      "support"=>$support,
+      "mailbox"=>$mail );
+    $arrJson=json_encode($description);
+
+    // $description=array(
+    //       "webspace"=>$webspace;
+    // )
     //echo ($avail);
     $ID=$_GET['ID'];
-    $obj->updateTbl_product($name,$link,$avail,$db->conn,$ID);
+    $obj->updateTbl_productAndDescription($parent_id,$name,$html,$avail,$arrJson,$month,$annual,$SKU,$db->conn,$ID);
 
     }   
 
@@ -51,10 +75,18 @@ if(isset($_POST['submitCategory']))
                     <div class="form-group">
                     <span>Parent Name<span>
                         <select name="parentname" id="parentname" style="width:418px;padding:7px;">
-                            
-                            <option value=0>
-                                Not Available
+                            <?php
+                            foreach($arr3 as $key2=>$value2)
+                            {
+                            ?>
+                            <option value= <?php echo($value2['id']); ?>>
+                                <?php echo $value2['prod_name']; 
+                                 $_SESSION['thisparent']=$value2['id'];
+                                ?>
                             </option>
+                             <?php 
+                             } 
+                             ?>
                         </select>
                     </div>
                     
@@ -69,11 +101,11 @@ if(isset($_POST['submitCategory']))
                    <input value="<?php echo $value['prod_name']; ?>" class="form-control" placeholder="Product Name" type="text" name="Product_name">
                 </div>
                 </div>
-                <!-- LINK -->
+                <!-- HTML -->
                 <div class="form-group">
-                <span>Link<span>
+                <span>Html<span>
                   <div class="input-group input-group-merge input-group-alternative">
-                    <input value="<?php echo $value['link']; ?>" class="form-control" placeholder="Link" type="text" name="Product_link">
+                    <input value="<?php echo $value['html']; ?>" class="form-control" placeholder="HTML" type="text" name="Product_html">
                   </div>
                 </div>
                 <!-- PRODUCT AVAILABILITY -->
@@ -94,7 +126,7 @@ if(isset($_POST['submitCategory']))
                     foreach($arr2 as $key2=>$value2)
                      { 
                          $description=json_decode($value2['description'],true);
-                         //print_r($value2);
+                         //print_r($description);
                         ?>
 
                 <div class="form-group">
@@ -114,21 +146,36 @@ if(isset($_POST['submitCategory']))
                 <div class="form-group">
                 <span>Free Domain<span>
                   <div class="input-group mb-3">
-                    <input value="<?php echo $description['freedomain']; ?>" class="form-control" placeholder="Free Domain" type="text" name="Free Domain">
+                    <input value="<?php echo $description['freedomain']; ?>" class="form-control" placeholder="Free Domain" type="text" name="Free_Domain">
                   </div>
                 </div>
+                <!-- Support -->
+                <div class="form-group">
+                <span>Support<span>
+                  <div class="input-group mb-3">
+                    <input value="<?php echo $description['support']; ?>" class="form-control" placeholder="Support" type="text" name="Support">
+                  </div>
+                </div>
+                <!-- Mailbox -->
+                <div class="form-group">
+                <span>Mailbox<span>
+                  <div class="input-group mb-3">
+                    <input value="<?php echo $description['mailbox']; ?>" class="form-control" placeholder="Mailbox" type="text" name="Mailbox">
+                  </div>
+                </div>
+
                 <!-- MONTHLY PRICE -->
                 <div class="form-group">
                 <span>Monthly Price<span>
                   <div class="input-group mb-3">
-                    <input value="<?php echo $value2['mon_price']; ?>" class="form-control" placeholder="Monthly Price" type="text" name="Monthly Price">
+                    <input value="<?php echo $value2['mon_price']; ?>" class="form-control" placeholder="Monthly Price" type="text" name="Monthly_Price">
                   </div>
                 </div>
                 <!-- ANNUAL PRICE -->
                 <div class="form-group">
                 <span>Annual Price<span>
                   <div class="input-group mb-3">
-                    <input value="<?php echo $value2['annual_price']; ?>" class="form-control" placeholder="Annual Price" type="text" name="Annual Price">
+                    <input value="<?php echo $value2['annual_price']; ?>" class="form-control" placeholder="Annual Price" type="text" name="Annual_Price">
                   </div>
                 </div>
                 <!-- SKU -->
@@ -138,6 +185,9 @@ if(isset($_POST['submitCategory']))
                     <input value="<?php echo $value2['sku']; ?>" class="form-control" placeholder="SKU" type="text" name="SKU">
                   </div>
                 </div>
+
+                <!--  -->
+                
                 <!-- CLOSING OF ARRAY 2 -->
                 <?php
                     }

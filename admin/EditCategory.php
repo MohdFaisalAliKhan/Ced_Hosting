@@ -17,12 +17,12 @@ if(isset($_POST['submitCategory']))
     //echo ($prod_parent_id);
     $name=$_POST['Product_name'];
     //echo ($name);
-    $link=$_POST['Product_link'];
-    //echo ($link);
+    $html=$_POST['Product_html'];
+    //echo ($html);
     $avail=$_POST['selectAvail'];
     //echo ($avail);
     $ID=$_GET['ID'];
-    $obj->updateTbl_product($name,$link,$avail,$db->conn,$ID);
+    $obj->updateTbl_product($name,$html,$avail,$db->conn,$ID);
 
     }   
 
@@ -85,10 +85,10 @@ if(isset($_POST['submitCategory']))
                     <input value="<?php echo $value['prod_name']; ?>" class="form-control" placeholder="Product Name" type="text" name="Product_name">
                   </div>
                 </div>
-                <!-- LINK -->
+                <!-- HTML -->
                 <div class="form-group">
                   <div class="input-group input-group-merge input-group-alternative">
-                    <input value="<?php echo $value['link']; ?>" class="form-control" placeholder="Link" type="text" name="Product_link">
+                    <input value="<?php echo $value['html']; ?>" class="form-control" placeholder="HTML" type="text" name="Product_html">
                   </div>
                 </div>
                 <!-- PRODUCT AVAILABILITY -->

@@ -179,7 +179,7 @@ class backbone
 					$parent_name="Hosting";
 
 				}
-				
+				$parent_name="Hosting";
 			}
 			return $parent_name;
 		}
@@ -199,9 +199,9 @@ class backbone
 		}
 
 	}
-	function insertTbl_product($prod_parent_id,$name,$link,$avail,$conn)
+	function insertTbl_product($prod_parent_id,$name,$html,$avail,$conn)
 	{
-		$sql="INSERT INTO tbl_product(`prod_parent_id`,`prod_name`,`link`,`prod_available`,`prod_launch_date`) VALUES ('$prod_parent_id','$name','$link','$avail',NOW())";
+		$sql="INSERT INTO tbl_product(`prod_parent_id`,`prod_name`,`html`,`prod_available`,`prod_launch_date`) VALUES ('$prod_parent_id','$name','$html','$avail',NOW())";
 		$res=mysqli_query($conn,$sql);
 		if($res==true)
 		{
@@ -243,10 +243,10 @@ class backbone
 		}
 	}
 
-	function updateTbl_product($name,$link,$avail,$conn,$ID)
+	function updateTbl_product($name,$html,$avail,$conn,$ID)
 	{
 		$sql="UPDATE `tbl_product` SET `prod_name`='$name',
-									 `link`='$link',
+									 `html`='$html',
 									 `prod_available`='$avail'
 									  WHERE `id`='$ID'";
 		$res=mysqli_query($conn,$sql);
@@ -262,11 +262,11 @@ class backbone
 
 	}
 
-	function addProduct($product_category,$product_name,$product_link,$product_available,$monthly,$yearly,$sku
+	function addProduct($product_category,$product_name,$product_html,$product_available,$monthly,$yearly,$sku
 						,$description ,$conn)
 	{
-		$sql="INSERT INTO `tbl_product`(`prod_parent_id`,`prod_name`,`link`,`prod_available`,`prod_launch_date`)
-					 VALUES ('$product_category','$product_name','$product_link','$product_available',NOW())";
+		$sql="INSERT INTO `tbl_product`(`prod_parent_id`,`prod_name`,`html`,`prod_available`,`prod_launch_date`)
+					 VALUES ('$product_category','$product_name','$product_html','$product_available',NOW())";
 		$result=mysqli_query($conn,$sql);
 		if($result==true)
 		{
@@ -355,26 +355,63 @@ class backbone
 					$newID2=$row2['prod_parent_id'];
 					//mil gya 1
 				}
-				return $newID2;
-				// $sql3="SELECT `prod_name` FROM `tbl_product` WHERE `prod_parent_id`='$newID2'";
-				// $res3=mysqli_query($conn,$sql3);
-				
-				// if(mysqli_num_rows($res3>0)
-				// {
-				// 	 while($row3=$res3->fetch_assoc())
-				// 	{
-				// 		$newID3=$row3['prod_parent_id'];
-				// 	}
+				//return $newID2;
+				 $sql3="SELECT * FROM `tbl_product` WHERE `prod_parent_id`='$newID2'";
+				 $res3=mysqli_query($conn,$sql3);
+				 $arr=array();
+				  if(mysqli_num_rows($res3)>0)
+				 {
+				 	 while($row3=$res3->fetch_assoc())
+				    {
+						 array_push($arr,$row3);
+					}
+					return $arr;
+					 
+					//echo "TRUEEEEEEEEEEEE";
 
 
-			    // }
+			    }
 		
 		    }
 	    }
 
 	}
 
-
+	function updateTbl_productAndDescription($parent_id,$name,$html,$avail,$description,$month,$annual,$SKU,$conn,$ID)
+	{
+		//STEP 1
+		//Updating Tbl_product
+		$sql="UPDATE `tbl_product` SET `prod_parent_id`='$parent_id',
+		                               `prod_name`='$name',
+									   `html`='$html',
+									   `prod_available`='$avail'
+									   WHERE `id`='$ID'";
+		$res=mysqli_query($conn,$sql);
+		if($res==true)
+		{
+			//STEP 2
+		    //Updating tbl_product_description
+			$sql2="UPDATE `tbl_product_description` SET `mon_price`='$month',
+			`annual_price`='$annual',
+			`sku`='$SKU',
+			`description`='$description'
+			WHERE `prod_id`='$ID'";
+			$res2=mysqli_query($conn,$sql2);
+			if($res2==true)
+			{
+			echo "<script type='text/javascript'> 
+			alert('Record Updated Successfully');
+			window.location.href='category.php';
+			</script>";
+			   
+		   }
+		}
+		else{
+			echo "<script type='text/javascript'> 
+			alert('Could not update');
+			</script>";
+		}
+	}
 }
 
 $db = new db();
