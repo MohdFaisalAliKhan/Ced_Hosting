@@ -39,20 +39,20 @@ class backbone
         if($res->num_rows >0)
     	{
     		while($row = $res->fetch_assoc()){
-                    if(($row['active']='0') && ( ($row['email_approved']='1') || ($row['phone_approved']='1')) && ($row['is_admin']='0') )
-                    	// meaning user is blocked.
-			          {
-						echo "<script>
-						alert('You have been blocked by the admin.');
-						</script>";	
-			            // $_SESSION['admin']=array('is_admin'=>$row['is_admin'],
-			            //                          'user_name'=>$row['user_name'],
-			            //                          'user_id'=>$row['user_id'],
-			            //                          'dateofsignup'=>$row['dateofsignup'],
-			            //                          'mobile'=>$row['mobile'],
-			            //                          'isblock'=>$row['isblock']);
+                    // if(($row['active']='0') && ( ($row['email_approved']='1') || ($row['phone_approved']='1')) && ($row['is_admin']='0') )
+                    // 	// meaning user is blocked.
+			        //   {
+					// 	echo "<script>
+					// 	alert('You have been blocked by the admin.');
+					// 	</script>";	
+			        //     // $_SESSION['admin']=array('is_admin'=>$row['is_admin'],
+			        //     //                          'user_name'=>$row['user_name'],
+			        //     //                          'user_id'=>$row['user_id'],
+			        //     //                          'dateofsignup'=>$row['dateofsignup'],
+			        //     //                          'mobile'=>$row['mobile'],
+			        //     //                          'isblock'=>$row['isblock']);
 			            
-					  }
+					//   }
 					if( $row['is_admin']=='0' && ( $row['active']='1' && ($row['phone_approved']='1' || $row['email_approved']='1') ) )
 					{
 						//Login kr skta hai
@@ -297,7 +297,7 @@ class backbone
 		{
 			while($row=$res->fetch_assoc())
 			{
-				$arr[]=$row;
+				array_push($arr,$row);
 			}
 			return $arr;
 		}
@@ -410,6 +410,38 @@ class backbone
 			echo "<script type='text/javascript'> 
 			alert('Could not update');
 			</script>";
+		}
+	}
+	
+	//Function to show category in hosting categories in header
+	function headerCategoryShow($conn)
+	{
+		$arr=array();
+		$sql="SELECT * FROM `tbl_product` WHERE `prod_parent_id`=1";
+		$res=mysqli_query($conn,$sql);
+		if(mysqli_num_rows($res)>0)
+		{
+			while($row=$res->fetch_assoc())
+			{
+               array_push($arr,$row);
+			}
+			return $arr;
+		}
+	}
+
+    //To show middle content when type of hosting is chosen from dropdown.
+	function showHeaderinHosting($ID,$conn)
+	{
+		$arr=array();
+		$sql="SELECT * FROM `tbl_product` WHERE `id`=$ID";
+		$res=mysqli_query($conn,$sql);
+		if(mysqli_num_rows($res)>0)
+		{
+			while($row=$res->fetch_assoc())
+			{
+               array_push($arr,$row);
+			}
+			return $arr;
 		}
 	}
 }

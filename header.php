@@ -1,5 +1,7 @@
 <?php
 session_start();
+require 'classes.php';
+// require 'db.php';
 
 	$filename=basename($_SERVER['REQUEST_URI']);
 	$file=explode('?',$filename);
@@ -100,10 +102,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							
 								
 								<ul class="dropdown-menu">
-									<li class="<?php if($file[0]=="linuxhosting.php"):?>active<?php  endif; ?>"><a href="linuxhosting.php">Linux hosting</a></li>
-									<li class="<?php if($file[0]=="wordpresshosting.php"):?>active<?php  endif; ?>"><a href="wordpresshosting.php">WordPress Hosting</a></li>
-									<li class="<?php if($file[0]=="windowshosting.php"):?>active<?php  endif; ?>"><a href="windowshosting.php">Windows Hosting</a></li>
-									<li class="<?php if($file[0]=="cmshosting.php"):?>active<?php  endif; ?>"><a href="cmshosting.php">CMS Hosting</a></li>
+									
+                                    
+									<?php
+										$db=new db();
+										$obj=new backbone();
+										$arr=$obj->headerCategoryShow($db->conn);
+										//print_r($arr)
+										foreach($arr as $key=>$value)
+										{
+											$ID=$value['id'];
+
+											?>
+											<li class="<?php if($file[0]==$value['prod_name']):?>active<?php  endif; ?>"><a href="catpage.php?ID=<?php echo $ID;?>"> <?php echo ($value['prod_name']);?></a></li>
+											<?php
+										}
+									?>
+
+
+
 								</ul>			
 						    </li>
 								

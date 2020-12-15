@@ -105,6 +105,7 @@ foreach($arr as $key=>$value){
 <div class="form-group">
 <label for="example-email-input" class="form-control-label">SKU</label>
 <input class="form-control" type="text" id="sku" name="sku">
+<small id="sku_error"></small>
 </div>
 <hr class="my-3">
 <h2>Features</h2>
@@ -123,7 +124,7 @@ foreach($arr as $key=>$value){
 <div class="form-group">
 <label for="example-email-input" class="form-control-label">Free Domain</label>
 <input class="form-control" type="text" id="freedomain" name="freedomain">
-<small>Enter 0 for no domain available in this service</small>
+<small id="domain_error"></small>
 </div>
 <div class="form-group">
 <label for="example-email-input" class="form-control-label">Language/Technology Support</label>
@@ -133,7 +134,7 @@ foreach($arr as $key=>$value){
 <div class="form-group">
 <label for="example-email-input" class="form-control-label">MailBox</label>
 <input class="form-control" type="text" id="mailbox" name="mailbox">
-<small>Enter Number of mailbox will be provided, enter 0 if none</small>
+<small id="mail_error"></small>
 </div>
 
 <input type="submit" class="btn btn-primary btn-lg btn-block" name="add_prod" id="add_prod" value="CREATE">
@@ -148,6 +149,8 @@ foreach($arr as $key=>$value){
     //Product Name Validation
     $("#product_name").on('blur',function(){
       var p=$("#product_name").val();
+      var first=f.charCodeAt(0);
+        var length=f.length;
       // var product_name=p.trim();
       if(p.match(/^[a-zA-Z_]+( [a-zA-Z_]+)(-[0-9]+(?!\-)+)$/))
       {
@@ -199,21 +202,66 @@ foreach($arr as $key=>$value){
         }
      });
      
+
+
      //SKU
-     $("#sku").on('blur',function(){
+     $("#sku").focusout(function(){
+       
        var sku=$("#sku").val();
        //Will only take # and - as special characters
-       if(sku.match(/^[a-zA-Z0-9_]+( [a-zA-Z0-9\#\- _]+)$/))
-      
+       for(var i=0;i<sku.length;i++)
        {
-         alert("match");
-       }
-       else{
-         alert("not match");
+         var first=sku.charAt(0);
+         
+         var length=sku.length-1;
+         var ch=sku.charCodeAt(i);
+         var ch2=sku.charCodeAt(i+1);
+         //To check for double spaces
+         if(sku.startsWith("#") || sku.startsWith("-"))
+         {
+            sku.trim();
+            var second=sku.charAt(1);
+            var char2=sku.charCodeAt(1);
+           //if string starts with # or - and has other alphabets followed
+            if(((char2>47 && char2<58)||(char2>64 && char2<91)||(char2>96 && char2<123)))
+            {
+              $("#sku_error").text("Valid input");
+              return true;
+            }
+            if(char2==45 || char2==35)
+            {
+              // $("#sku_error").text("Single special character not allowed");
+              // $("#sku").val("");\
+              $("#sku_error").text("Invalid input");
+              $("#sku").val("");
+            }
+          
+         }
+         if(!((ch>47 && ch<58)||(ch>64 && ch<91)||(ch>96 && ch<123)||(ch==45)||(ch==35)))
+         {
+          $("#sku_error").text("invalid input");
+          $("#sku").val("");
+
+         }
+         
+         if(ch==32 && ch2==32)
+         {
+          //$("#sku_error").text("");
+           //Double spaces not allowed.
+           //alert("double space");
+           $("#sku_error").text("Extra white space not allowed");
+           $("#sku").val("");
+         }
+         if(sku.charCodeAt(length-1)==32)
+         {
+          console.log("last character cant be a zero");
+          $("#sku_error").text("Cannot end a string with a whitespace");
+          $("#sku").val("");
+         }
        }
      });
-
-     $("#webspace").on('blur',function(){
+    //SKU Validation complete
+    $("#webspace").on('blur',function(){
         var w=$("#webspace").val();
         if(w.match(/^[0-9_]+(.[0-9])*$/))
         {
@@ -251,22 +299,144 @@ foreach($arr as $key=>$value){
         }
      });
 
+
 //      Free Domain/ Mailbox:-
 //     -Only numeric/ only alphabetic(i.e. no combinations)
 //     -No white spaces
 //     -No "." allowed
-
-     $("#freedomain").on('blur',function(){
+      
+      //DOMAIN
+     $("#freedomain").focusout(function(){
         var f=$("#freedomain").val();
-        if(f.match(/^[0-9_])*$/))
+        var first=f.charCodeAt(0);
+        var length=f.length;
+        // console.log(length);
+        if( !((first>47&&first<58) || (first>64&&first<91) || (first>96 && first<123)) && (length==1))
         {
-          alert("match");
+          $("#domain_error").text("Invalid input");
+            $("#freedomain").val("");
+            // return false;
         }
-        else
+        if( ((first>47&&first<58) || (first>64&&first<91) || (first>96 && first<123)) && (length==1))
         {
-          alert("not match");
+          $("#domain_error").text("Valid input");
+            // $("#mailbox").val("");
+            return true;
         }
+
+       for(var i=0;i<f.length-1;i++)
+       {
+         var length=f.length-1;
+         var c=f.charAt(i);
+         var c2=f.charAt(i+1);
+         var ch=f.charCodeAt(i);
+         var ch2=f.charCodeAt(i+1);
+       
+          if((c==" ") || (c=="."))
+          {
+            $("#domain_error").text("Whitespace or . is not allowed");
+            $("#freedomain").val("");
+          }
+          if((ch>47 && ch<58))
+          {
+            //first character is numeric
+            if(!(ch2>47 && ch2<58))
+            {
+              //if second character is not numeric then invalid input.
+              $("#domain_error").text("Either numeric or alphabetic.But can't be both.Also you can't use . or whitespace");
+              $("#freedomain").val("");
+              return false;
+
+            }
+            else{
+              $("#domain_error").text("Valid Input");
+            }
+          }
+          if((ch>64 && ch<91) || (ch>96 && ch<123))
+          {
+            if((ch2>47 && ch2<58))
+            {
+              //if second character is not numeric then invalid input.
+              $("#domain_error").text("Either numeric or alphabetic.But can't be both.Also you can't use . or whitespace");
+              $("#freedomain").val("");
+              return false;
+
+            }
+            $("#domain_error").text("valid");
+          }
+          
+         }
      });
+
+
+     //MAILBOX
+     $("#mailbox").focusout(function(){
+        var f=$("#mailbox").val();
+        var first=f.charCodeAt(0);
+        var second=f.charCodeAt(1);
+        var length=f.length;
+        // console.log(f.length);
+        if( !((first>47&&first<58) || (first>64&&first<91) || (first>96 && first<123)) && (length==1))
+        {
+          $("#mail_error").text("Invalid input");
+            $("#mailbox").val("");
+            return false;
+        }
+        if( ((first>47&&first<58) || (first>64&&first<91) || (first>96 && first<123)) && (length==1))
+        {
+          $("#mail_error").text("Valid input");
+            // $("#mailbox").val("");
+            return true;
+        }
+
+       for(var i=0;i<f.length-1;i++)
+       {
+         var length=f.length-1;
+         var c=f.charAt(i);
+         var c2=f.charAt(i+1);
+         var ch=f.charCodeAt(i);
+         var ch2=f.charCodeAt(i+1);
+         //console.log(first);
+          if((c==" ") || (c=="."))
+          {
+            $("#mail_error").text("Whitespace or . is not allowed");
+            $("#mailbox").val("");
+          }
+          if((ch>47 && ch<58))
+          {
+            //first character is numeric
+            if(!(ch2>47 && ch2<58))
+            {
+              //if second character is not numeric then invalid input.
+              $("#mail_error").text("Either numeric or alphabetic.But can't be both.Also you can't use . or whitespace");
+              $("#mailbox").val("");
+              return false;
+
+            }
+            else{
+              $("#mail_error").text("Valid Input");
+            }
+          }
+          if((ch>64 && ch<91) || (ch>96 && ch<123))
+          {
+            if((ch2>47 && ch2<58))
+            {
+              //if second character is not numeric then invalid input.
+              $("#mail_error").text("Either numeric or alphabetic.But can't be both.Also you can't use . or whitespace");
+              $("#mailbox").val("");
+              return false;
+
+            }
+            $("#mail_error").text("valid");
+          }
+          // else{
+          //    $("#mail_error").text("Either numeric or alphabetic.But can't be both.Also you can't use . or whitespace");
+          //     $("#mailbox").val("");
+          //     return false;
+          // }
+         }
+     });
+    
     
 
   });
