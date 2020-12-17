@@ -75,6 +75,7 @@ foreach($arr as $key=>$value){
 <div class="form-group">
 <label for="example-text-input" class="form-control-label">Product Name</label>
 <input class="form-control" type="text" id="product_name" name="product_name" required>
+<small id="name_error"></small>
 </div>
 <div class="form-group">
 <label for="example-email-input" class="form-control-label">Product URL</label>
@@ -97,10 +98,12 @@ foreach($arr as $key=>$value){
 <div class="form-group">
 <label for="example-email-input" class="form-control-label">Monthly Price</label>
 <input class="form-control" type="text" id="monthly" name="monthly" id="monthly">
+<small id="month_error"></small>
 </div>
 <div class="form-group">
 <label for="example-email-input" class="form-control-label">Annual Price</label>
 <input class="form-control" type="text" id="yearly" name="yearly">
+<small id="year_error"></small>
 </div>
 <div class="form-group">
 <label for="example-email-input" class="form-control-label">SKU</label>
@@ -144,42 +147,168 @@ foreach($arr as $key=>$value){
 
 <script>
   $(document).ready(function(){
-    $("#add_prod").prop('disabled',true);
+    //$("#add_prod").prop('disabled',true);
     
     //Product Name Validation
     $("#product_name").on('blur',function(){
-      var p=$("#product_name").val();
+      var f=$("#product_name").val();
+      var result=false;
       var first=f.charCodeAt(0);
-        var length=f.length;
+      var length=f.length;
+      var l=(f.length)-1;
+      var last=f.charCodeAt(l);
       // var product_name=p.trim();
-      if(p.match(/^[a-zA-Z_]+( [a-zA-Z_]+)(-[0-9]+(?!\-)+)$/))
-      {
-        alert("match");
-      }
-      else{
-        alert("No match");
-      }
+       console.log(last);
+
+      //If input is of length 1 check first character
+      if((first>47&&first<58)&& (length==1) )
+        {
+          $("#name_error").text("Length is 1 hence first character can't be a number");
+            $("#product_name").val("");
+            $("#product_name").css("border","2px solid red");
+            result=false;
+            return result;
+        }
+        if(first==32)
+        {
+          $("#name_error").text("First character can't be whitespace");
+            $("#product_name").val("");
+            $("#product_name").css("border","2px solid red");
+            result=false;
+            return result;
+        }
+        if( ((first>64&&first<91) || (first>96 && first<123)) && (length==1))
+        {
+          $("#name_error").text("Valid input");
+          $("#product_name").css("border","2px solid green");
+          result=true;
+          return result;
+        }
+        if((first>32 && first<48) && (length==1))
+        {
+          $("#name_error").text("First character can't be special character");
+          $("#product_name").val("");
+          $("#product_name").css("border","2px solid red");
+          result=false;
+          return result;
+        }
+        //Check for last character
+        if(!(last>47 && last<58) && !(last>64 && last<91) && !(last>96 && last<123))
+        {
+          $("#name_error").text("Last character not valid");
+          $("#product_name").val("");
+          $("#product_name").css("border","2px solid red");
+          result=false;
+          return result;
+        }
+
+        //If product name starts with special characters.
+        // if(first)
+
+       for(var i=0;i<f.length-1;i++)
+       {
+         var length=f.length-1;
+         var c=f.charAt(0);
+         //console.log(c);
+         var c2=f.charAt(i+1);
+         var ch=f.charCodeAt(i);
+         var ch2=f.charCodeAt(i+1);
+         var ch3=f.charCodeAt(i+2);
+        
+          if((c==" ") || (c=="."))
+          {
+            $("#name_error").text("Whitespace or . is not allowed");
+            $("#product_name").val("");
+            $("#product_name").css("border","2px solid red");
+            result=false;
+            return result;
+          }
+          if((ch>64 && ch<91) || (ch>96 && ch<123))
+          {
+            //first character is alphabet and second is numeric is allowed only if there is a dash between them.
+            if((ch2>47 && ch2<58))
+            {
+              //if second character is not numeric then invalid input.
+              $("#name_error").text("No dash");
+              $("#product_name").val("");
+              $("#product_name").css("border","2px solid red");
+              result=false;
+              return result;
+              //return false;
+            }
+            if((ch3>47 && ch3<58) && (ch2==45))
+            {
+              $("#name_error").text("Valid");
+              // $("#product_name").val("");
+              $("#product_name").css("border","2px solid green");
+              result=true;
+              return result;
+
+            }
+            else{
+              $("#name_error").text("Valid Input");
+              $("#product_name").css("border","2px solid green");
+              result=true;
+              return result;
+            }
+          }
+          // if((ch>64 && ch<91) || (ch>96 && ch<123))
+          // {
+          //   if((ch2>47 && ch2<58))
+          //   {
+          //     //if second character is not numeric then invalid input.
+          //     $("#name_error").text("Either numeric or alphabetic.But can't be both.Also you can't use . or whitespace");
+          //     $("#product_name").val("");
+          //     return false;
+
+          //   }
+          //   $("#name_error").text("valid");
+          // }
+          
+         }
     });
-    
+
+
+  // //////////////////////////////////////////////////////////////////////////////////
     //Monthly Price Validation
      $("#monthly").on('blur',function(){
+        var result=false;
         var m=$("#monthly").val();
-        if(m.match(/^[0-9_]+(.[0-9]+)$/))
-        {
+        var l=(m.length)-1;
+        var last=m.charCodeAt(l);
+
           if(m.length>15)
           {
-            alert("Length exceeded");
+            $("#month_error").text("Length cannot be greater than 15");
             $("#monthly").val("");
+            $("#monthly").css("border","2px solid red");
+            result=false;
+            return result;
           }
-          else{
-            alert("match");
+          if(last==46)
+          {
+            $("#month_error").text("Invalid input");
+            $("#monthly").val("");
+            $("#monthly").css("border","2px solid red");
+            result=false;
+            return result;
           }
-          
-        }
-        else{
-          alert("Not Match");
-          $("#monthly").val("");
-        }
+          for(var i=0;i<m.length;i++)
+          {
+            var c1=m.charCodeAt(i);
+            var c2=m.charCodeAt(i+1);
+            if(c1>47 && c1<58)
+            {
+              if(!(c2>47&&c2<58) &&())
+              {
+                $("#monthly").css("border","2px solid red");
+                result=false;
+                return result;
+
+              }
+            }
+          }
+
      });
     
     //Annual Price Validation

@@ -15,16 +15,8 @@
 
             }
         }
-        
-        ?>
-
-
-
-
-
-
-				
-					<div class="tab-prices">
+       ?>
+		<div class="tab-prices">
 						<div class="container">
 							<div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
 								<ul id="myTab" class="nav nav-tabs left-tab" role="tablist">
@@ -34,7 +26,7 @@
 								<div id="myTabContent" class="tab-content">
 									<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
 										<div class="linux-prices">
-											<div class="col-md-3 linux-price">
+											<!-- <div class="col-md-3 linux-price">
 												<div class="linux-top">
 												<h4>Standard</h4>
 												</div>
@@ -87,25 +79,53 @@
 													</ul>
 												</div>
 												<a href="#">buy now</a>
-											</div>
+											 </div> -->
+											 <?php
+												$arr=$obj->showProductsBelowHosting($db->conn,$_GET['ID']);
+												print_r($arr);
+											if(isset($arr))
+											{
+												foreach($arr as $key=>$value)
+												{
+													if($value['prod_parent_id']==$_GET['ID'])
+													{
+													$details=json_decode($value['description'],true);
+
+													//print_r($value);
+												?>
 											<div class="col-md-3 linux-price">
 												<div class="linux-top">
 												<h4>Pro</h4>
 												</div>
 												<div class="linux-bottom">
-													<h5>$259 <span class="month">per month</span></h5>
-													<h6>Unlimited Domains</h6>
+													<h5> ₹ <?php echo $value['mon_price'];?>/-<span class="month"> per month</span></h5>
+													<h5> ₹ <?php echo $value['annual_price'];?>/- <span class="month"> per year</span></h5>
+													<h6><?php echo$value['prod_name'];?></h6>
 													<ul>
-													<li><strong>Unlimited</strong> Disk Space</li>
-													<li><strong>Unlimited</strong> Data Transfer</li>
-													<li><strong>Unlimited</strong> Email Accounts</li>
-													<li><strong>Includes </strong>  Global CDN</li>
-													<li><strong>High Performance</strong>  Servers</li>
+													<li><strong>Webspace:- </strong><?php echo $details['webspace'];?></li>
+													<li><strong>Bandwidth:- </strong><?php echo $details['bandwidth'];?></li>
+													<li><strong>Free Domain:- </strong><?php echo $details['freedomain'];?></li>
+													<li><strong>Support:- </strong><?php echo $details['support'];?></li>
+													<li><strong>Mailbox:- </strong><?php echo $details['mailbox'];?></li>
+													<li><strong>Stock Keeping Unit:- </strong><?php echo $value['sku'];?></li>
+													<li><strong>Product Status:- </strong><?php
+																							   if($value['prod_available']==1)
+																							   {
+																								   echo "Available";
+																							   }
+																							   if($value['prod_available']==0){
+																								   echo "Unavailable";
+																							   }?></li>
 													<li><strong>location</strong> : <img src="images/india.png"></li>
 													</ul>
 												</div>
 												<a href="#">buy now</a>
 											</div>
+											<?php
+													}
+											}
+										}
+											?>
 											<div class="clearfix"></div>
 										</div>
 									</div>
@@ -129,24 +149,7 @@
 												</div>
 												<a href="#" class="us-button">buy now</a>
 											</div>
-											<div class="col-md-3 linux-price">
-												<div class="linux-top us-top">
-												<h4>Advanced</h4>
-												</div>
-												<div class="linux-bottom us-bottom">
-													<h5>$359 <span class="month">per month</span></h5>
-													<h6>2 Domains</h6>
-													<ul>
-													<li><strong>Unlimited</strong> Disk Space</li>
-													<li><strong>Unlimited</strong> Data Transfer</li>
-													<li><strong>Unlimited</strong> Email Accounts</li>
-													<li><strong>Includes </strong>  Global CDN</li>
-													<li><strong>High Performance</strong>  Servers</li>
-													<li><strong>location</strong> : <img src="images/us.png"></li>
-													</ul>
-												</div>
-												<a href="#" class="us-button">buy now</a>
-											</div>
+											
 											<div class="col-md-3 linux-price">
 												<div class="linux-top us-top">
 												<h4>Business</h4>

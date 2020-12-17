@@ -444,6 +444,34 @@ class backbone
 			return $arr;
 		}
 	}
+	
+	function showProductsBelowHosting($conn,$ID)
+	{
+		$sql="SELECT * FROM `tbl_product` WHERE `prod_parent_id`='$ID' ";
+		$res=mysqli_query($conn,$sql);
+		if(mysqli_num_rows($res)>0)
+		{
+			$arr=array();
+			while($row=$res->fetch_assoc())
+			{
+               array_push($arr,$row);
+			}
+			foreach($arr as $key=>$value)
+			{
+				$arr2=array();
+				$sql2="SELECT * FROM `tbl_product` INNER JOIN `tbl_product_description` ON `tbl_product`.id=`tbl_product_description`.prod_id";
+				$res2=mysqli_query($conn,$sql2);
+				while($row2=$res2->fetch_assoc())
+				{
+                   array_push($arr2,$row2);
+				}
+				return $arr2;
+			}
+			//ID is the id of product in product table which is same as prod_id in tbl_description.
+			//$ID2=$arr[];
+		}
+
+	}
 }
 
 $db = new db();
